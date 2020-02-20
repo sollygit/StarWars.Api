@@ -57,11 +57,30 @@ namespace Products.Repository
             // Update Product
             _appContext.Entry(product).CurrentValues.SetValues(item);
 
-            // Update ProductOptions 
+            foreach (var option in item.ProductOptions)
+            {
+                var entry = product.ProductOptions.SingleOrDefault(o => o.Id == option.Id);
+                
+                if (entry == null)
+                {
+                    // Add new ProductOption
+                    _appContext.ProductOptions.Add(option);
+                }
+                else
+                {
+                    // Update existing ProductOption
+                    _appContext.Entry(entry).CurrentValues.SetValues(option);
+                    _appContext.Entry(entry).State = EntityState.Modified;
+                }
+            }
+
             foreach (var option in options)
             {
-                var entry = item.ProductOptions.Single(o => o.Id == option.Id);
-                _appContext.Entry(option).CurrentValues.SetValues(entry);
+                // Delete Unchanged ProductOptions
+                if (_appContext.Entry(option).State == EntityState.Unchanged)
+                {
+                    _appContext.Entry(option).State = EntityState.Deleted;
+                }
             }
 
             if (await _appContext.SaveChangesAsync() == 0)
