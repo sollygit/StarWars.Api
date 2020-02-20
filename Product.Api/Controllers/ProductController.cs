@@ -67,11 +67,6 @@ namespace Products.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != product.Id)
-            {
-                return BadRequest(ModelState);
-            }
-
             if (await productService.Get(id) == null)
             {
                 return NotFound(id);

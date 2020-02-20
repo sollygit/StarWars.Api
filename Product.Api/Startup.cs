@@ -1,3 +1,5 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Products.Api.Services;
 using Products.Interface;
+using Products.Model;
 using Products.Repository;
 
 namespace Products.Api
@@ -24,13 +27,18 @@ namespace Products.Api
         public void ConfigureServices(IServiceCollection services)
         {
             string connection = Configuration["ConnectionStrings:DefaultConnection"];
-
+            
+            services.AddMvc(setup =>
+            {
+            }).AddFluentValidation();
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(connection, b => b.MigrationsAssembly("Products.Api"));
             });
-            services.AddScoped<IProductsRepository, ProductsRepository>();
-            services.AddScoped<IProductService, ProductService>();
+            services.AddTransient<IProductsRepository, ProductsRepository>();
+            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IValidator<Product>, ProductValidator>();
+            services.AddTransient<IValidator<ProductOption>, ProductOptionValidator>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

@@ -51,8 +51,8 @@ namespace Products.Repository
 
         public async Task<Product> Update(Guid id, Product item)
         {
-            var product = await _appContext.Products.SingleAsync(p => p.Id == item.Id);
-            var options = await _appContext.ProductOptions.Where(p => p.ProductId == item.Id).ToListAsync();
+            var product = await _appContext.Products.SingleAsync(p => p.Id == id);
+            var options = await _appContext.ProductOptions.Where(p => p.ProductId == id).ToListAsync();
 
             // Update Product
             _appContext.Entry(product).CurrentValues.SetValues(item);
@@ -74,9 +74,9 @@ namespace Products.Repository
                 }
             }
 
+            // Delete Unchanged ProductOptions
             foreach (var option in options)
             {
-                // Delete Unchanged ProductOptions
                 if (_appContext.Entry(option).State == EntityState.Unchanged)
                 {
                     _appContext.Entry(option).State = EntityState.Deleted;
