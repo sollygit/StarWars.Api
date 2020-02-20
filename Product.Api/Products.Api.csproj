@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20200218111338_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200218111338_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200220013028_Init_Database.cs" />
+    <Compile Remove="Migrations\20200220013028_Init_Database.Designer.cs" />
+    <Compile Remove="Migrations\20200220013344_Init-DB.cs" />
+    <Compile Remove="Migrations\20200220013344_Init-DB.Designer.cs" />
+    <Compile Remove="Migrations\20200220014328_Init_DB.cs" />
+    <Compile Remove="Migrations\20200220014328_Init_DB.Designer.cs" />
+    <Compile Remove="Migrations\20200220015911_Init_DB.cs" />
+    <Compile Remove="Migrations\20200220015911_Init_DB.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Product.Interface\Products.Interface.csproj" />
+    <ProjectReference Include="..\Products.Repository\Products.Repository.csproj" />
+  </ItemGroup>
+  
+</Project>
