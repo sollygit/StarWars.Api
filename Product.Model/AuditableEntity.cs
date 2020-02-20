@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace Products.Model
 {
@@ -10,7 +11,9 @@ namespace Products.Model
 
     public class AuditableEntity : IAuditableEntity
     {
+        [JsonIgnore]
         public DateTimeOffset? UpdatedDate { get; set; }
+        [JsonIgnore]
         public DateTimeOffset? CreatedDate { get; set; }
     }
 }

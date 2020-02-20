@@ -40,8 +40,8 @@ namespace Products.Api.Controllers
             return new ObjectResult(item);
         }
 
-        [HttpPost("add")]
-        public async Task<IActionResult> Add([FromBody] Product product)
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] Product product)
         {
             if (!ModelState.IsValid)
             {
@@ -56,7 +56,7 @@ namespace Products.Api.Controllers
             }
 
             var item = await productService.Create(product);
-            return CreatedAtAction("Add", new { id = item.Id }, item);
+            return CreatedAtAction("Create", new { id = item.Id }, item);
         }
 
         [HttpPut("{id}")]
@@ -76,7 +76,7 @@ namespace Products.Api.Controllers
             return new OkObjectResult(item);
         }
 
-        [HttpDelete("delete/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             if (id == null) return BadRequest();
