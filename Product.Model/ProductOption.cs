@@ -1,7 +1,5 @@
 ﻿using FluentValidation;
-using Newtonsoft.Json;
 using System;
-using System.Runtime.Serialization;
 
 namespace Products.Model
 {

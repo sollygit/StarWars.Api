@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json.Serialization;
 using Products.Api.Services;
 using Products.Interface;
 using Products.Model;
@@ -29,17 +28,17 @@ namespace Products.Api
         {
             string connection = Configuration["ConnectionStrings:DefaultConnection"];
 
-            services.AddMvc()
-                .AddNewtonsoftJson(options => { options.SerializerSettings.ContractResolver = new DefaultContractResolver(); })
-                .AddFluentValidation();
             services.AddDbContext<ApplicationDbContext>(options => { options.UseSqlServer(connection); });
             services.AddTransient<IProductsRepository, ProductsRepository>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IValidator<Product>, ProductValidator>();
             services.AddTransient<IValidator<ProductOption>, ProductOptionValidator>();
             services.AddRouting(options => options.LowercaseUrls = true);
-            services.AddControllers();
             
+            services.AddControllers()
+            .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null)
+            .AddFluentValidation();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Products API", Version = "v1" });

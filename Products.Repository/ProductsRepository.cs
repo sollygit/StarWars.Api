@@ -71,12 +71,12 @@ namespace Products.Repository
                 }
             }
 
-            // Add the new items
+            // Add new child collection items
             foreach (var option in entity.ProductOptions)
             {
                 if (options.All(o => o.Id != option.Id))
                 {
-                    options.Add(option);
+                    _dbContext.Add(option);
                 }
             }
 
