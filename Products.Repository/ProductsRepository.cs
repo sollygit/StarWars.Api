@@ -20,7 +20,7 @@ namespace Products.Repository
     public class ProductsRepository : Repository<Product>, IProductsRepository
     {
         private readonly ILogger<ProductsRepository> _logger;
-        private ApplicationDbContext _appContext => (ApplicationDbContext)_context;
+        private ApplicationDbContext _dbContext => (ApplicationDbContext)_context;
 
         public ProductsRepository(ILogger<ProductsRepository> _logger, ApplicationDbContext context) : base(context)
         {
@@ -29,7 +29,7 @@ namespace Products.Repository
 
         public async Task<IEnumerable<Product>> All()
         {
-            return await _appContext.Products
+            return await _dbContext.Products
                 .Include(p => p.ProductOptions)
                 .OrderBy(p => p.Name)
                 .ToListAsync();
@@ -37,65 +37,59 @@ namespace Products.Repository
 
         public async Task<Product> GetById(Guid id)
         {
-            return await _appContext.Products
+            return await _dbContext.Products
                 .Include(p => p.ProductOptions)
                 .SingleOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<Product> Create(Product product)
         {
-            var entry = _appContext.Add(product);
-            await _appContext.SaveChangesAsync();
+            var entry = _dbContext.Add(product);
+            await _dbContext.SaveChangesAsync();
             return entry.Entity;
         }
 
-        public async Task<Product> Update(Guid id, Product item)
+        public async Task<Product> Update(Guid id, Product entity)
         {
-            var product = await _appContext.Products.SingleAsync(p => p.Id == id);
-            var options = await _appContext.ProductOptions.Where(p => p.ProductId == id).ToListAsync();
+            var product = _dbContext.Products.Include(p => p.ProductOptions).Single(p => p.Id == id);
+            var options = product.ProductOptions;
 
-            // Update Product
-            _appContext.Entry(product).CurrentValues.SetValues(item);
+            // Update the parent product
+            _dbContext.Entry(product).CurrentValues.SetValues(entity);
 
-            foreach (var option in item.ProductOptions)
+            // Remove or update child collection items
+            foreach (var option in options)
             {
-                var entry = product.ProductOptions.SingleOrDefault(o => o.Id == option.Id);
-                
-                if (entry == null)
+                var optionEntity = entity.ProductOptions.SingleOrDefault(o => o.Id == option.Id);
+                if (optionEntity != null)
                 {
-                    // Add new ProductOption
-                    _appContext.ProductOptions.Add(option);
+                    _dbContext.Entry(option).CurrentValues.SetValues(optionEntity);
                 }
                 else
                 {
-                    // Update existing ProductOption
-                    _appContext.Entry(entry).CurrentValues.SetValues(option);
-                    _appContext.Entry(entry).State = EntityState.Modified;
+                    _dbContext.Remove(option);
                 }
             }
 
-            // Delete Unchanged ProductOptions
-            foreach (var option in options)
+            // Add the new items
+            foreach (var option in entity.ProductOptions)
             {
-                if (_appContext.Entry(option).State == EntityState.Unchanged)
+                if (options.All(o => o.Id != option.Id))
                 {
-                    _appContext.Entry(option).State = EntityState.Deleted;
+                    options.Add(option);
                 }
             }
 
-            if (await _appContext.SaveChangesAsync() == 0)
-            {
-                _logger.LogError($"Update product {id} failed");
-            }
+            await _dbContext.SaveChangesAsync();
 
             return product;
         }
 
         public async Task<Product> Delete(Guid id)
         {
-            var item = _appContext.Products.Single(o => o.Id == id);
-            var entry = _appContext.Remove(item);
-            await _appContext.SaveChangesAsync();
+            var item = _dbContext.Products.Single(o => o.Id == id);
+            var entry = _dbContext.Remove(item);
+            await _dbContext.SaveChangesAsync();
             return entry.Entity;
         }
     }

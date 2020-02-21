@@ -12,7 +12,6 @@ using Products.Api.Services;
 using Products.Interface;
 using Products.Model;
 using Products.Repository;
-using System.Text.Json;
 
 namespace Products.Api
 {
@@ -31,14 +30,9 @@ namespace Products.Api
             string connection = Configuration["ConnectionStrings:DefaultConnection"];
 
             services.AddMvc()
-            .AddNewtonsoftJson(options => 
-            {
-                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
-            }).AddFluentValidation();
-            services.AddDbContext<ApplicationDbContext>(options =>
-            {
-                options.UseSqlServer(connection, b => b.MigrationsAssembly("Products.Api"));
-            });
+                .AddNewtonsoftJson(options => { options.SerializerSettings.ContractResolver = new DefaultContractResolver(); })
+                .AddFluentValidation();
+            services.AddDbContext<ApplicationDbContext>(options => { options.UseSqlServer(connection); });
             services.AddTransient<IProductsRepository, ProductsRepository>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IValidator<Product>, ProductValidator>();
