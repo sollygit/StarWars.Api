@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Products.Model;
 using System;
 using System.Collections.Generic;
@@ -19,12 +18,10 @@ namespace Products.Repository
 
     public class ProductsRepository : Repository<Product>, IProductsRepository
     {
-        private readonly ILogger<ProductsRepository> _logger;
         private ApplicationDbContext _dbContext => (ApplicationDbContext)_context;
 
-        public ProductsRepository(ILogger<ProductsRepository> _logger, ApplicationDbContext context) : base(context)
+        public ProductsRepository(ApplicationDbContext context) : base(context)
         {
-            this._logger = _logger;
         }
 
         public async Task<IEnumerable<Product>> All()
