@@ -27,7 +27,7 @@ namespace Products.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
+                options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"], b => b.MigrationsAssembly("Products.Api")));
             services.AddTransient<IProductsRepository, ProductsRepository>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IValidator<Product>, ProductValidator>();

@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Products.Model;
+using Products.Repository.Configuration;
 using System;
 using System.Linq;
 using System.Threading;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Products.Repository
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : DbContext
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductOption> ProductOptions { get; set; }
@@ -20,18 +20,8 @@ namespace Products.Repository
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-            // Products table
-            builder.Entity<Product>().HasKey(p => p.Id).HasName("PrimaryKey_Id");
-            builder.Entity<Product>().Property(p => p.Id).IsRequired();
-            builder.Entity<Product>().Property(p => p.Name).IsRequired().HasMaxLength(100);
-            builder.Entity<Product>().Property(p => p.Description).HasMaxLength(500);
-            builder.Entity<Product>().Property(p => p.Price).HasColumnType("decimal(18,2)");
-            builder.Entity<Product>().Property(p => p.DeliveryPrice).HasColumnType("decimal(18,2)");
-            builder.Entity<Product>().ToTable($"{nameof(Products)}");
-
-            // ProductOptions table
-            builder.Entity<ProductOption>().ToTable($"{nameof(ProductOptions)}");
+            builder.ApplyConfiguration(new ProductConfiguration());
+            builder.ApplyConfiguration(new ProductOptionsConfiguration());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
