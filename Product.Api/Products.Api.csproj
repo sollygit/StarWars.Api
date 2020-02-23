@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Product.Interface\Products.Interface.csproj" />
     <ProjectReference Include="..\Products.Repository\Products.Repository.csproj" />
   </ItemGroup>
   

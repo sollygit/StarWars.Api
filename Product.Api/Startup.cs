@@ -26,9 +26,8 @@ namespace Products.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connection = Configuration["ConnectionStrings:DefaultConnection"];
-
-            services.AddDbContext<ApplicationDbContext>(options => { options.UseSqlServer(connection); });
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
             services.AddTransient<IProductsRepository, ProductsRepository>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IValidator<Product>, ProductValidator>();

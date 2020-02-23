@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Products.Interface;
 using Products.Model;
 using System;
 using System.Collections.Generic;
@@ -16,12 +17,13 @@ namespace Products.Repository
         Task<Product> Delete(Guid id);
     }
 
-    public class ProductsRepository : Repository<Product>, IProductsRepository
+    public class ProductsRepository : BaseRepository<Product>, IProductsRepository
     {
-        private ApplicationDbContext _dbContext => (ApplicationDbContext)_context;
+        private readonly ApplicationDbContext _dbContext;
 
         public ProductsRepository(ApplicationDbContext context) : base(context)
         {
+            _dbContext = context;
         }
 
         public async Task<IEnumerable<Product>> All()
