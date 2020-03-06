@@ -73,7 +73,7 @@ namespace Products.Api
 
             services.AddRouting(options => options.LowercaseUrls = true);
             services
-                .AddControllersWithViews()
+                .AddControllers()
                 .AddFluentValidation()
                 .AddJsonOptions(options => {
                     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
