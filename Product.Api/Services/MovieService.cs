@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using AutoMapper;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -6,7 +7,6 @@ using Products.Api.Settings;
 using Products.Interface;
 using Products.Model;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -26,7 +26,7 @@ namespace Products.Api.Services
             this.settings = settings;
         }
 
-        public Task<IEnumerable<Movie>> GetAll(string provider)
+        public Task<Movie[]> GetAll(string provider)
         {
             // Cache results per provider
             return cache.GetOrCreateAsync(provider, async entry =>
@@ -36,7 +36,7 @@ namespace Products.Api.Services
             });
         }
 
-        private async Task<IEnumerable<Movie>> GetAllAsync(string provider)
+        private async Task<Movie[]> GetAllAsync(string provider)
         {
             using var client = new HttpClient();
 
@@ -46,17 +46,10 @@ namespace Products.Api.Services
             var uriBuilder = new UriBuilder($"{settings.BaseUrl}/{provider}/movies");
             var response = await client.GetAsync(uriBuilder.Uri);
             var jObject = JObject.Parse(await response.Content.ReadAsStringAsync());
-            var movies = ((JArray)jObject["Movies"]).Select(o => {
-                return new Movie
-                {
-                    ID = o["ID"].Value<string>(),
-                    Title = o["Title"].Value<string>(),
-                    Year = o["Year"].Value<string>(),
-                    Type = o["Type"].Value<string>(),
-                    Poster = o["Poster"].Value<string>(),
-                    Price = GetRandomPrice() // Mockup a random price 
-                };
-            }).ToList();
+            var movies = ((JArray)jObject["Movies"]).Select(o =>
+            {
+                return Mapper.Map<Movie>(o);
+            });
 
             if (!response.IsSuccessStatusCode)
             {
@@ -64,7 +57,7 @@ namespace Products.Api.Services
                 throw new ServiceException(response.StatusCode, $"Get Movies failed for provider {provider}");
             }
 
-            return movies;
+            return movies.ToArray();
         }
 
         public async Task<MovieDetails> Get(string provider, string id)
@@ -86,11 +79,6 @@ namespace Products.Api.Services
             }
 
             return movie;
-        }
-
-        private decimal GetRandomPrice()
-        {
-            return decimal.Parse(string.Format("{0:0.##}", new Random().NextDouble() * 1000));
         }
     }
 }

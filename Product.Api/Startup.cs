@@ -1,3 +1,4 @@
+using AutoMapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -34,6 +35,11 @@ namespace Products.Api
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials());
+            });
+
+            Mapper.Initialize(cfg =>
+            {
+                cfg.AddProfile<AutoMapperProfile>();
             });
 
             // Configurations
