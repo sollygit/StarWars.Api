@@ -17,6 +17,7 @@ using Products.Model;
 using Products.Repository;
 using System;
 using System.Net.Http;
+using System.Text.Json;
 
 namespace Products.Api
 {
@@ -54,9 +55,9 @@ namespace Products.Api
             services.AddMemoryCache();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration["ConnectionStrings:DefaultConnection"], 
+                    Configuration["ConnectionStrings:DefaultConnection"],
                     b => b.MigrationsAssembly("Products.Api")));
-            
+
             services.AddSingleton(provider => settings.Get<MovieSettings>());
             services.AddTransient<IProductsRepository, ProductsRepository>();
             services.AddTransient<IProductService, ProductService>();
@@ -71,9 +72,12 @@ namespace Products.Api
             .AddPolicyHandler(GetRetryPolicy()); // Set retry policy
 
             services.AddRouting(options => options.LowercaseUrls = true);
-            services.AddControllers()
-            .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null)
-            .AddFluentValidation();
+            services
+                .AddControllersWithViews()
+                .AddFluentValidation()
+                .AddJsonOptions(options => {
+                    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                });
 
             services.AddSwaggerGen(c =>
             {
