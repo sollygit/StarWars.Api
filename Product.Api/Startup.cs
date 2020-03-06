@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Products.Api.Services;
+using Products.Api.Settings;
 using Products.Interface;
 using Products.Model;
 using Products.Repository;
@@ -26,8 +27,25 @@ namespace Products.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.WithOrigins(Configuration["CorsUrl"])
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
+
+            // Configurations
+            services.Configure<MovieSettings>(Configuration.GetSection("MovieSettings"));
+
+            services.AddMemoryCache();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"], b => b.MigrationsAssembly("Products.Api")));
+            
+            services.AddSingleton(provider => Configuration.GetSection("MovieSettings").Get<MovieSettings>());
+            services.AddTransient<IMovieService, MovieService>();
+
             services.AddTransient<IProductsRepository, ProductsRepository>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IValidator<Product>, ProductValidator>();
@@ -52,6 +70,8 @@ namespace Products.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("CorsPolicy");
+            app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

@@ -1,0 +1,36 @@
+<div class="container">
+  <div>
+    <div class="container-fluid">
+      <form #movieListForm="ngForm">
+        <div class="form-group">
+          <div class="col-md-3 col-sm-3 col-xs-3">
+            <select class="form-control" id="provider" name="provider" #provider (change)="getMovies(provider.value)">
+              <option *ngFor="let p of providerList" [value]="p.providerName" [text]="p.providerName"></option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
+    <table *ngIf="movies" class="table table-bordred table-striped table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Year</th>
+          <th>Price (mockup)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let movie of movies">
+          <td>
+            <a [routerLink]="['/fetch-data', provider.value.toLowerCase(), movie.id]" href="javascript:;" class="vertical-mid">{{ movie.id }}</a>
+          </td>
+          <td>{{ movie.title }}</td>
+          <td>{{ movie.year }}</td>
+          <td>{{ movie.price | currency }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <h6 *ngIf="!loading && movies == null" class="text-muted">Something went wrong, please try again later...</h6>
+  </div>
+</div>
