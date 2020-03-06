@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using Products.Api.Settings;
 using Products.Interface;
 using Products.Model;
+using Products.Model.ViewModels;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -18,15 +19,21 @@ namespace Products.Api.Services
         private readonly ILogger<MovieService> logger;
         private readonly IMemoryCache cache;
         private readonly MovieSettings settings;
+        private readonly HttpClient httpClient;
 
-        public MovieService(ILogger<MovieService> logger, IMemoryCache cache, MovieSettings settings)
+        public MovieService(
+            ILogger<MovieService> logger, 
+            IMemoryCache cache, 
+            MovieSettings settings,
+            HttpClient httpClient)
         {
             this.logger = logger;
             this.cache = cache;
             this.settings = settings;
+            this.httpClient = httpClient;
         }
 
-        public Task<Movie[]> GetAll(string provider)
+        public Task<MovieViewModel[]> GetAll(string provider)
         {
             // Cache results per provider
             return cache.GetOrCreateAsync(provider, async entry =>
@@ -36,19 +43,16 @@ namespace Products.Api.Services
             });
         }
 
-        private async Task<Movie[]> GetAllAsync(string provider)
+        private async Task<MovieViewModel[]> GetAllAsync(string provider)
         {
-            using var client = new HttpClient();
-
             // Inject header token
-            client.DefaultRequestHeaders.Add("x-access-token", settings.AccessToken);
-
             var uriBuilder = new UriBuilder($"{settings.BaseUrl}/{provider}/movies");
-            var response = await client.GetAsync(uriBuilder.Uri);
+            var response = await httpClient.GetAsync(uriBuilder.Uri);
             var jObject = JObject.Parse(await response.Content.ReadAsStringAsync());
             var movies = ((JArray)jObject["Movies"]).Select(o =>
             {
-                return Mapper.Map<Movie>(o);
+                var movie = JsonConvert.DeserializeObject<MovieDetails>(o.ToString());
+                return Mapper.Map<MovieViewModel>(movie);
             });
 
             if (!response.IsSuccessStatusCode)
@@ -60,15 +64,10 @@ namespace Products.Api.Services
             return movies.ToArray();
         }
 
-        public async Task<MovieDetails> Get(string provider, string id)
+        public async Task<MovieDetailsViewModel> Get(string provider, string id)
         {
-            using var client = new HttpClient();
-
-            // Inject header token
-            client.DefaultRequestHeaders.Add("x-access-token", settings.AccessToken);
-
             var uriBuilder = new UriBuilder($"{settings.BaseUrl}/{provider}/movie/{id}");
-            var response = await client.GetAsync(uriBuilder.Uri);
+            var response = await httpClient.GetAsync(uriBuilder.Uri);
             var result = response.Content.ReadAsStringAsync().Result;
             var movie = JsonConvert.DeserializeObject<MovieDetails>(result);
 
@@ -78,7 +77,7 @@ namespace Products.Api.Services
                 throw new ServiceException(response.StatusCode, $"Get Movie failed for provider {provider} and id {id}");
             }
 
-            return movie;
+            return Mapper.Map<MovieDetailsViewModel>(movie);
         }
     }
 }

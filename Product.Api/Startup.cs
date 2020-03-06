@@ -8,11 +8,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Polly;
+using Polly.Extensions.Http;
 using Products.Api.Services;
 using Products.Api.Settings;
 using Products.Interface;
 using Products.Model;
 using Products.Repository;
+using System;
+using System.Net.Http;
 
 namespace Products.Api
 {
@@ -42,22 +46,31 @@ namespace Products.Api
                 cfg.AddProfile<AutoMapperProfile>();
             });
 
+            var settings = Configuration.GetSection("MovieSettings");
+
             // Configurations
-            services.Configure<MovieSettings>(Configuration.GetSection("MovieSettings"));
+            services.Configure<MovieSettings>(settings);
 
             services.AddMemoryCache();
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"], b => b.MigrationsAssembly("Products.Api")));
+                options.UseSqlServer(
+                    Configuration["ConnectionStrings:DefaultConnection"], 
+                    b => b.MigrationsAssembly("Products.Api")));
             
-            services.AddSingleton(provider => Configuration.GetSection("MovieSettings").Get<MovieSettings>());
-            services.AddTransient<IMovieService, MovieService>();
-
+            services.AddSingleton(provider => settings.Get<MovieSettings>());
             services.AddTransient<IProductsRepository, ProductsRepository>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IValidator<Product>, ProductValidator>();
             services.AddTransient<IValidator<ProductOption>, ProductOptionValidator>();
+            services.AddHttpClient<IMovieService, MovieService>(client =>
+            {
+                // Inject header token
+                client.DefaultRequestHeaders.Add("x-access-token", settings["AccessToken"]);
+            })
+            .SetHandlerLifetime(TimeSpan.FromMinutes(5)) // Set lifetime to five minutes
+            .AddPolicyHandler(GetRetryPolicy()); // Set retry policy
+
             services.AddRouting(options => options.LowercaseUrls = true);
-            
             services.AddControllers()
             .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null)
             .AddFluentValidation();
@@ -90,6 +103,14 @@ namespace Products.Api
             {
                 endpoints.MapControllers();
             });
+        }
+
+        IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+        {
+            return HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+                .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
         }
     }
 }
