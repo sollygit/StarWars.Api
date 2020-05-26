@@ -6,21 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200218111338_InitialCreate.cs" />
-    <Compile Remove="Migrations\20200218111338_InitialCreate.Designer.cs" />
-    <Compile Remove="Migrations\20200220013028_Init_Database.cs" />
-    <Compile Remove="Migrations\20200220013028_Init_Database.Designer.cs" />
-    <Compile Remove="Migrations\20200220013344_Init-DB.cs" />
-    <Compile Remove="Migrations\20200220013344_Init-DB.Designer.cs" />
-    <Compile Remove="Migrations\20200220014328_Init_DB.cs" />
-    <Compile Remove="Migrations\20200220014328_Init_DB.Designer.cs" />
-    <Compile Remove="Migrations\20200220015911_Init_DB.cs" />
-    <Compile Remove="Migrations\20200220015911_Init_DB.Designer.cs" />
-    <Compile Remove="Migrations\20200223110936_Init_DB.cs" />
-    <Compile Remove="Migrations\20200223110936_Init_DB.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="7.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.2" />
