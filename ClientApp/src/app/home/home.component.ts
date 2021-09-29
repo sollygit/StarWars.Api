@@ -6,5 +6,5 @@ import { environment } from 'src/environments/environment';
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
-  swaggerUrl = `${environment.baseUrl}/swagger`;
+  swaggerUrl = `${environment.baseUrl}`;
 }

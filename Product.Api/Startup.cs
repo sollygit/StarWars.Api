@@ -100,6 +100,7 @@ namespace Products.Api
             {
                 c.DocumentTitle = "Swagger - Products API";
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Products API V1");
+                c.RoutePrefix = string.Empty;
             });
             app.UseRouting();
             app.UseAuthorization();
@@ -109,7 +110,7 @@ namespace Products.Api
             });
         }
 
-        IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+        static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
         {
             return HttpPolicyExtensions
                 .HandleTransientHttpError()

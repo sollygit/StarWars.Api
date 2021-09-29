@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 export class NavMenuComponent {
   isExpanded = false;
   swaggerLogo = require("../../assets/images/swagger-logo.png");
-  swaggerUrl = `${environment.baseUrl}/swagger`;
+  swaggerUrl = `${environment.baseUrl}`;
 
   collapse() {
     this.isExpanded = false;
