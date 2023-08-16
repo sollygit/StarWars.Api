@@ -28,8 +28,6 @@ namespace Products.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            if (id == null) return BadRequest("Id is required");
-
             var item = await productService.Get(id);
 
             if (item == null)
@@ -79,7 +77,6 @@ namespace Products.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null) return BadRequest();
             var products = await productService.GetAll();
             if (!products.Any(o => o.Id == id))
                 return NotFound(id);
