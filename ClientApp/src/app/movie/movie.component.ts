@@ -36,7 +36,7 @@ export class MovieComponent implements OnInit {
       },
         error => {
           console.log(error);
-          this.movie = null;
+          this.movie = new Movie();
           this.toggleLoading(true);
         });
   }

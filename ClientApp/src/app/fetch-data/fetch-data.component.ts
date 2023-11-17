@@ -36,7 +36,7 @@ export class FetchDataComponent implements OnInit {
       },
         error => {
           console.log(error);
-          this.movies = null;
+          this.movies = [];
           this.toggleLoading(true);
         });
   }

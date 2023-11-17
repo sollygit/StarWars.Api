@@ -7,7 +7,7 @@ export class Utilities {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
-  public static parseDate(date) {
+  public static parseDate(date: any) {
 
     if (date) {
 

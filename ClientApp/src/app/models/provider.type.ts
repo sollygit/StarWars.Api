@@ -1,6 +1,6 @@
 export class Provider {
-    providerId: number;
-    providerName: string;
+    providerId?: number;
+    providerName?: string;
 
     public constructor(
         fields?: {

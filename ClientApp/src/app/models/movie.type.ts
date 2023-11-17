@@ -1,10 +1,10 @@
 export class Movie {
-  id: string;
-  title: string;
-  year: string;
-  type: string;
-  poster: string;
-  price: number;
+  id!: string;
+  title!: string;
+  year!: string;
+  type!: string;
+  poster!: string;
+  price!: number;
 
   public constructor(
     fields?: {
