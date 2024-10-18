@@ -19,9 +19,13 @@ namespace Products.Model
     {
         public ProductValidator()
         {
-            RuleFor(register => register.Id).NotEmpty().WithMessage("Product ID cannot be empty");
-            RuleFor(register => register.Name).NotEmpty().WithMessage("Product Name cannot be empty");
-            RuleForEach(x => x.ProductOptions).SetValidator(new ProductOptionValidator());
+            RuleFor(x => x.Id)
+                .NotEmpty().WithMessage("Product ID cannot be empty");
+            RuleFor(x => x.Name)
+                .NotEmpty().WithMessage("Product Name cannot be empty")
+                .MaximumLength(100).WithMessage("Product Name maximum length is 100");
+            RuleForEach(x => x.ProductOptions)
+                .SetValidator(new ProductOptionValidator());
         }
     }
 }

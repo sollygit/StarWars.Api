@@ -15,8 +15,10 @@ namespace Products.Model
     {
         public ProductOptionValidator()
         {
-            RuleFor(register => register.Id).NotEmpty().WithMessage("ProductOption ID cannot be empty");
-            RuleFor(register => register.ProductId).NotEmpty().WithMessage("Product ID cannot be empty");
+            RuleFor(x => x.Id)
+                .NotEmpty().WithMessage("ProductOption ID cannot be empty");
+            RuleFor(x => x.ProductId)
+                .NotEmpty().WithMessage("Product ID cannot be empty");
         }
     }
 }

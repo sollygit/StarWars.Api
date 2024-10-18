@@ -1,6 +1,5 @@
 using AutoMapper;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -33,8 +32,7 @@ namespace Products.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options =>
-            {
+            services.AddCors(options => {
                 options.AddPolicy("CorsPolicy",
                     builder => builder.WithOrigins(Configuration["CorsUrl"])
                         .AllowAnyMethod()
@@ -42,8 +40,7 @@ namespace Products.Api
                         .AllowCredentials());
             });
 
-            Mapper.Initialize(cfg =>
-            {
+            Mapper.Initialize(cfg => {
                 cfg.AddProfile<AutoMapperProfile>();
             });
 
@@ -61,26 +58,21 @@ namespace Products.Api
             services.AddSingleton(provider => settings.Get<MovieSettings>());
             services.AddTransient<IProductsRepository, ProductsRepository>();
             services.AddTransient<IProductService, ProductService>();
-            services.AddTransient<IValidator<Product>, ProductValidator>();
-            services.AddTransient<IValidator<ProductOption>, ProductOptionValidator>();
-            services.AddHttpClient<IMovieService, MovieService>(client =>
-            {
-                // Inject header token
+            services.AddValidatorsFromAssemblyContaining<ProductValidator>(ServiceLifetime.Transient);
+            services.AddHttpClient<IMovieService, MovieService>(client => {
                 client.DefaultRequestHeaders.Add("x-access-token", settings["AccessToken"]);
             })
             .SetHandlerLifetime(TimeSpan.FromMinutes(5)) // Set lifetime to five minutes
             .AddPolicyHandler(GetRetryPolicy()); // Set retry policy
 
-            services.AddRouting(options => options.LowercaseUrls = true);
             services
+                .AddRouting(options => options.LowercaseUrls = true)
                 .AddControllers()
-                .AddFluentValidation()
                 .AddJsonOptions(options => {
                     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 });
 
-            services.AddSwaggerGen(c =>
-            {
+            services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Products API", Version = "v1" });
             });
         }
@@ -88,8 +80,7 @@ namespace Products.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
+            if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
 

@@ -41,17 +41,9 @@ namespace Products.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Product product)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var products = await productService.GetAll();
 
-            if (products.Any(o => o.Id == product.Id))
-            {
-                return BadRequest($"Product with ID {product.Id} already exists!");
-            }
+            if (products.Any(o => o.Id == product.Id)) return BadRequest($"Product with ID {product.Id} already exists!");
 
             var item = await productService.Create(product);
             return CreatedAtAction("Create", new { id = item.Id }, item);
@@ -60,11 +52,6 @@ namespace Products.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] Product product)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             if (await productService.Get(id) == null)
             {
                 return NotFound(id);
