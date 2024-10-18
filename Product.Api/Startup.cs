@@ -1,5 +1,6 @@
 using AutoMapper;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Polly;
 using Polly.Extensions.Http;
+using Polly.Retry;
 using Products.Api.Services;
 using Products.Api.Settings;
 using Products.Interface;
@@ -58,7 +60,6 @@ namespace Products.Api
             services.AddSingleton(provider => settings.Get<MovieSettings>());
             services.AddTransient<IProductsRepository, ProductsRepository>();
             services.AddTransient<IProductService, ProductService>();
-            services.AddValidatorsFromAssemblyContaining<ProductValidator>(ServiceLifetime.Transient);
             services.AddHttpClient<IMovieService, MovieService>(client => {
                 client.DefaultRequestHeaders.Add("x-access-token", settings["AccessToken"]);
             })
@@ -71,6 +72,10 @@ namespace Products.Api
                 .AddJsonOptions(options => {
                     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 });
+
+            services.AddFluentValidationAutoValidation();
+            services.AddFluentValidationClientsideAdapters();
+            services.AddValidatorsFromAssemblyContaining<ProductValidator>(ServiceLifetime.Transient);
 
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Products API", Version = "v1" });
@@ -101,7 +106,7 @@ namespace Products.Api
             });
         }
 
-        static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+        static AsyncRetryPolicy<HttpResponseMessage> GetRetryPolicy()
         {
             return HttpPolicyExtensions
                 .HandleTransientHttpError()
