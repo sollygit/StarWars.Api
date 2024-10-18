@@ -7,19 +7,23 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Products.Repository;
 
+#nullable disable
+
 namespace Products.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200223111558_Init_DB")]
+    [Migration("20241018060556_Init_DB")]
     partial class Init_DB
     {
+        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.2")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Products.Model.Product", b =>
                 {
@@ -34,16 +38,16 @@ namespace Products.Api.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -54,7 +58,7 @@ namespace Products.Api.Migrations
                     b.HasKey("Id")
                         .HasName("PrimaryKey_Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Products.Model.ProductOption", b =>
@@ -76,7 +80,7 @@ namespace Products.Api.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductOptions");
+                    b.ToTable("ProductOptions", (string)null);
                 });
 
             modelBuilder.Entity("Products.Model.ProductOption", b =>
@@ -86,6 +90,11 @@ namespace Products.Api.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Products.Model.Product", b =>
+                {
+                    b.Navigation("ProductOptions");
                 });
 #pragma warning restore 612, 618
         }

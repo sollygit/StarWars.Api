@@ -1,10 +1,14 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System;
+
+#nullable disable
 
 namespace Products.Api.Migrations
 {
+    /// <inheritdoc />
     public partial class Init_DB : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -12,8 +16,8 @@ namespace Products.Api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    UpdatedDate = table.Column<DateTimeOffset>(nullable: true),
-                    CreatedDate = table.Column<DateTimeOffset>(nullable: true),
+                    UpdatedOn = table.Column<DateTimeOffset>(nullable: true),
+                    CreatedOn = table.Column<DateTimeOffset>(nullable: true),
                     Name = table.Column<string>(maxLength: 100, nullable: false),
                     Description = table.Column<string>(maxLength: 500, nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -51,6 +55,7 @@ namespace Products.Api.Migrations
                 column: "ProductId");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

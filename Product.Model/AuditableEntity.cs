@@ -5,15 +5,15 @@ namespace Products.Model
 {
     public interface IAuditableEntity
     {
-        DateTimeOffset? CreatedDate { get; set; }
-        DateTimeOffset? UpdatedDate { get; set; }
+        DateTimeOffset? CreatedOn { get; set; }
+        DateTimeOffset? UpdatedOn { get; set; }
     }
 
     public class AuditableEntity : IAuditableEntity
     {
         [JsonIgnore]
-        public DateTimeOffset? UpdatedDate { get; set; }
+        public DateTimeOffset? UpdatedOn { get; set; }
         [JsonIgnore]
-        public DateTimeOffset? CreatedDate { get; set; }
+        public DateTimeOffset? CreatedOn { get; set; }
     }
 }

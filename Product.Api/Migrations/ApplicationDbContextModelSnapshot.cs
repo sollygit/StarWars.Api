@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Products.Repository;
 
+#nullable disable
+
 namespace Products.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
@@ -15,9 +17,10 @@ namespace Products.Api.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.2")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Products.Model.Product", b =>
                 {
@@ -25,34 +28,34 @@ namespace Products.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset?>("CreatedDate")
+                    b.Property<DateTimeOffset?>("CreatedOn")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<decimal>("DeliveryPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTimeOffset?>("UpdatedDate")
+                    b.Property<DateTimeOffset?>("UpdatedOn")
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id")
                         .HasName("PrimaryKey_Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Products.Model.ProductOption", b =>
@@ -74,7 +77,7 @@ namespace Products.Api.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductOptions");
+                    b.ToTable("ProductOptions", (string)null);
                 });
 
             modelBuilder.Entity("Products.Model.ProductOption", b =>
@@ -84,6 +87,11 @@ namespace Products.Api.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Products.Model.Product", b =>
+                {
+                    b.Navigation("ProductOptions");
                 });
 #pragma warning restore 612, 618
         }

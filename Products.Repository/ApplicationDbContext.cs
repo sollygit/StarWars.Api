@@ -41,12 +41,12 @@ namespace Products.Repository
 
                 if (entry.State == EntityState.Added)
                 {
-                    entity.CreatedDate = now;
+                    entity.CreatedOn = now;
                 }
                 else
                 {
-                    entity.UpdatedDate = now;
-                    base.Entry(entity).Property(x => x.CreatedDate).IsModified = false;
+                    entity.UpdatedOn = now;
+                    base.Entry(entity).Property(x => x.CreatedOn).IsModified = false;
                 }
             }
         }
