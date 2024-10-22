@@ -1,9 +1,8 @@
-![image](https://user-images.githubusercontent.com/30820950/74899848-b2c59500-53e9-11ea-8f35-393f47c6514e.png)
+![image](https://github.com/user-attachments/assets/8a514723-bf37-4bdf-8d07-28f75ef725a0)
 
 ### Providers:
 `CinemaWorld` or `FilmWorld`
 
-![image](https://user-images.githubusercontent.com/30820950/73591481-a95bb200-453a-11ea-8a7d-c4b27e68536e.png)
+# StarWars SPA in Angular
+![image](https://github.com/user-attachments/assets/6f2230f2-168c-4a65-bea7-02abed72faab)
 
-# Angular Movie SPA
-![image](https://user-images.githubusercontent.com/30820950/76058978-6f624d80-5fc9-11ea-8fb0-4de387fad6fd.png)
