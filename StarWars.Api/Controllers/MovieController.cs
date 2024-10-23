@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StarWars.Interface;
+using System;
 using System.Threading.Tasks;
 
 namespace StarWars.Api.Controllers
@@ -37,6 +38,15 @@ namespace StarWars.Api.Controllers
 
             var item = await service.Get(provider, id);
 
+            return new OkObjectResult(item);
+        }
+
+        [HttpGet("starwars/{movieID}")]
+        public async Task<IActionResult> Get([FromRoute] Guid movieID)
+        {
+            var item = await service.Get(movieID);
+            if (item == null) return new NotFoundObjectResult(movieID);
+            
             return new OkObjectResult(item);
         }
     }

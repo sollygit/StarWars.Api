@@ -7,7 +7,7 @@ namespace StarWars.Repository
     public interface IMoviesRepository : IRepository<Movie>
     {
         Task<IEnumerable<Movie>> All();
-        Task<Movie> GetById(string id);
+        Task<Movie> Get(Guid movieID);
         Task<Movie> Create(Movie movie);
         Task<Movie> Update(string id, Movie movie);
         Task<Movie> Delete(string id);
@@ -30,11 +30,11 @@ namespace StarWars.Repository
                 .ToListAsync();
         }
 
-        public async Task<Movie> GetById(string id)
+        public async Task<Movie> Get(Guid movieID)
         {
             return await _dbContext.Movies
                 .Include(p => p.MovieDetails)
-                .SingleOrDefaultAsync(p => p.ID == id);
+                .SingleOrDefaultAsync(p => p.MovieID == movieID);
         }
 
         public async Task<Movie> Create(Movie movie)

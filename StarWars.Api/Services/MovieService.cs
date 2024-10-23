@@ -12,6 +12,7 @@ using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using StarWars.Repository;
 
 namespace StarWars.Api.Services
 {
@@ -21,17 +22,20 @@ namespace StarWars.Api.Services
         private readonly IMemoryCache cache;
         private readonly MovieSettings settings;
         private readonly HttpClient httpClient;
+        private readonly IMoviesRepository repo;
 
         public MovieService(
             ILogger<MovieService> logger,
             IMemoryCache cache,
             MovieSettings settings,
-            HttpClient httpClient)
+            HttpClient httpClient,
+            IMoviesRepository repo)
         {
             this.logger = logger;
             this.cache = cache;
             this.settings = settings;
             this.httpClient = httpClient;
+            this.repo = repo;
         }
 
         public Task<MovieViewModel[]> GetAll(string provider)
@@ -78,6 +82,12 @@ namespace StarWars.Api.Services
             }
 
             return Mapper.Map<MovieDetailsViewModel>(movie);
+        }
+
+        public async Task<MovieViewModel> Get(Guid movieID)
+        {
+            var movie = await repo.Get(movieID);
+            return Mapper.Map<MovieViewModel>(movie);
         }
     }
 }
