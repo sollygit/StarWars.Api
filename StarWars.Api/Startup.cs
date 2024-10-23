@@ -18,7 +18,6 @@ using StarWars.Model;
 using StarWars.Repository;
 using System;
 using System.Net.Http;
-using System.Text.Json;
 
 namespace StarWars.Api
 {
@@ -67,10 +66,7 @@ namespace StarWars.Api
 
             services
                 .AddRouting(options => options.LowercaseUrls = true)
-                .AddControllers()
-                .AddJsonOptions(options => {
-                    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-                });
+                .AddControllers();
 
             services.AddFluentValidationAutoValidation();
             services.AddFluentValidationClientsideAdapters();
