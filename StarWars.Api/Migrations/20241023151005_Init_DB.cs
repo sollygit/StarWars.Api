@@ -15,7 +15,8 @@ namespace StarWars.Api.Migrations
                 name: "Movie",
                 columns: table => new
                 {
-                    ID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    MovieID = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
+                    ID = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Year = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -27,7 +28,7 @@ namespace StarWars.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PrimaryKey_Id", x => x.ID);
+                    table.PrimaryKey("PK_Movie", x => x.MovieID);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,7 +53,9 @@ namespace StarWars.Api.Migrations
                     Metascore = table.Column<int>(type: "int", nullable: false),
                     Rating = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Votes = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MovieID = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    MovieID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UpdatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -61,7 +64,7 @@ namespace StarWars.Api.Migrations
                         name: "FK_MovieDetails_Movie_MovieID",
                         column: x => x.MovieID,
                         principalTable: "Movie",
-                        principalColumn: "ID");
+                        principalColumn: "MovieID");
                 });
 
             migrationBuilder.CreateIndex(

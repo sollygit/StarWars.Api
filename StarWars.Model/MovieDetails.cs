@@ -2,7 +2,7 @@
 
 namespace StarWars.Model
 {
-    public class MovieDetails
+    public class MovieDetails : AuditableEntity
     {
         public string ID { get; set; }
         public string Title { get; set; }

@@ -8,7 +8,6 @@ namespace StarWars.Repository.Configuration
     {
         public void Configure(EntityTypeBuilder<MovieDetails> builder)
         {
-            builder.HasKey(m => m.ID).HasName("PK_MovieDetails");
             builder.Property(m => m.ID).IsRequired();
             builder.Property(m => m.Title).IsRequired().HasMaxLength(100);
             builder.Property(m => m.Poster).HasMaxLength(500);

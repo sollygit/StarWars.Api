@@ -3,13 +3,13 @@ using System.Text.Json.Serialization;
 
 namespace StarWars.Model
 {
-    public interface IAuditableEntity
+    public interface IAuditable
     {
         DateTimeOffset? CreatedOn { get; set; }
         DateTimeOffset? UpdatedOn { get; set; }
     }
 
-    public class AuditableEntity : IAuditableEntity
+    public class AuditableEntity : IAuditable
     {
         [JsonIgnore]
         public DateTimeOffset? UpdatedOn { get; set; }

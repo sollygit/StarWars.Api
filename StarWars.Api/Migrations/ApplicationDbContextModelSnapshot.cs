@@ -24,11 +24,17 @@ namespace StarWars.Api.Migrations
 
             modelBuilder.Entity("StarWars.Model.Movie", b =>
                 {
-                    b.Property<string>("ID")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("MovieID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<DateTimeOffset?>("CreatedOn")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("ID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -54,8 +60,8 @@ namespace StarWars.Api.Migrations
                     b.Property<string>("Year")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID")
-                        .HasName("PrimaryKey_Id");
+                    b.HasKey("MovieID")
+                        .HasName("PK_Movie");
 
                     b.ToTable("Movie", (string)null);
                 });
@@ -71,6 +77,9 @@ namespace StarWars.Api.Migrations
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTimeOffset?>("CreatedOn")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("Director")
                         .HasColumnType("nvarchar(max)");
 
@@ -83,8 +92,8 @@ namespace StarWars.Api.Migrations
                     b.Property<int>("Metascore")
                         .HasColumnType("int");
 
-                    b.Property<string>("MovieID")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid?>("MovieID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Poster")
                         .HasMaxLength(500)
@@ -113,6 +122,9 @@ namespace StarWars.Api.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTimeOffset?>("UpdatedOn")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("Votes")
                         .HasColumnType("nvarchar(max)");
 
@@ -122,8 +134,7 @@ namespace StarWars.Api.Migrations
                     b.Property<string>("Year")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID")
-                        .HasName("PK_MovieDetails");
+                    b.HasKey("ID");
 
                     b.HasIndex("MovieID");
 

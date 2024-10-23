@@ -29,10 +29,10 @@ namespace StarWars.Repository
         private void UpdateAuditEntities()
         {
             var modifiedEntries = ChangeTracker.Entries()
-                .Where(x => x.Entity is IAuditableEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
+                .Where(x => x.Entity is IAuditable && (x.State == EntityState.Added || x.State == EntityState.Modified));
             foreach (var entry in modifiedEntries)
             {
-                var entity = (IAuditableEntity)entry.Entity;
+                var entity = (IAuditable)entry.Entity;
                 DateTime now = DateTime.UtcNow;
 
                 if (entry.State == EntityState.Added)
