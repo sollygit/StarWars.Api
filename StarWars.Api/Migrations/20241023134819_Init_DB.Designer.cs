@@ -12,7 +12,7 @@ using StarWars.Repository;
 namespace StarWars.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241022171006_Init_DB")]
+    [Migration("20241023134819_Init_DB")]
     partial class Init_DB
     {
         /// <inheritdoc />
@@ -32,9 +32,6 @@ namespace StarWars.Api.Migrations
 
                     b.Property<DateTimeOffset?>("CreatedOn")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<decimal>("DeliveryPrice")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");

@@ -11,7 +11,6 @@ namespace StarWars.Model
         public string Type { get; set; }
         public string Poster { get; set; }
         public decimal Price { get; set; }
-        public decimal DeliveryPrice { get; set; }
         public bool IsActive { get; set; }
         public ICollection<MovieDetails> MovieDetails { get; set; } = new List<MovieDetails>();
     }

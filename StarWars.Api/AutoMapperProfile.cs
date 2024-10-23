@@ -15,7 +15,7 @@ namespace StarWars.Api
                 .ForMember(o => o.Year, map => map.MapFrom(o => o.Year))
                 .ForMember(o => o.Type, map => map.MapFrom(o => o.Type))
                 .ForMember(o => o.Poster, map => map.MapFrom(o => o.Poster))
-                .ForMember(o => o.Price, map => map.MapFrom(o => GetRandomPrice()))
+                .ForMember(o => o.Price, map => map.MapFrom(o => decimal.Parse(string.Format("{0:0.##}", new Random().NextDouble() * 1000))))
                 .ReverseMap();
 
             CreateMap<MovieDetails, MovieDetailsViewModel>()
@@ -33,7 +33,5 @@ namespace StarWars.Api
                 .ForMember(o => o.Votes, map => map.MapFrom(o => o.Votes))
                 .ReverseMap();
         }
-
-        private static decimal GetRandomPrice() => decimal.Parse(string.Format("{0:0.##}", new Random().NextDouble() * 1000));
     }
 }

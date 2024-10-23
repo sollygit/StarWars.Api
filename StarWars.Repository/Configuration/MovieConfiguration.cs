@@ -13,7 +13,6 @@ namespace StarWars.Repository.Configuration
             builder.Property(m => m.Title).IsRequired().HasMaxLength(100);
             builder.Property(m => m.Poster).HasMaxLength(500);
             builder.Property(m => m.Price).HasColumnType("decimal(18,2)");
-            builder.Property(m => m.DeliveryPrice).HasColumnType("decimal(18,2)");
             builder.ToTable("Movie");
         }
     }
