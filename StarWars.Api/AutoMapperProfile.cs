@@ -9,7 +9,7 @@ namespace StarWars.Api
     {
         public AutoMapperProfile()
         {
-            CreateMap<Movie, MovieViewModel>()
+            CreateMap<Movie, MovieView>()
                 .ForMember(o => o.ID, map => map.MapFrom(o => o.ID))
                 .ForMember(o => o.Title, map => map.MapFrom(o => o.Title))
                 .ForMember(o => o.Year, map => map.MapFrom(o => o.Year))

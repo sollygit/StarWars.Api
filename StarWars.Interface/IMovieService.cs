@@ -6,7 +6,7 @@ namespace StarWars.Interface
 {
     public interface IMovieService
     {
-        Task<MovieViewModel[]> All();
-        Task<MovieViewModel> Get(Guid movieID);
+        Task<MovieView[]> All();
+        Task<MovieView> Get(Guid movieID);
     }
 }

@@ -5,7 +5,7 @@ namespace StarWars.Interface
 {
     public interface IWebJetService
     {
-        Task<MovieViewModel[]> GetAll(string provider);
-        Task<MovieDetailsViewModel> Get(string provider, string id);
+        Task<MovieView[]> GetAll(string provider);
+        Task<MovieDetailsView> Get(string provider, string id);
     }
 }

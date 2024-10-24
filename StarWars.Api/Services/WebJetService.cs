@@ -34,7 +34,7 @@ namespace StarWars.Api.Services
             this.httpClient = httpClient;
         }
 
-        public Task<MovieViewModel[]> GetAll(string provider)
+        public Task<MovieView[]> GetAll(string provider)
         {
             // Cache results per provider
             return cache.GetOrCreateAsync(provider, async entry => {
@@ -43,7 +43,7 @@ namespace StarWars.Api.Services
             });
         }
 
-        private async Task<MovieViewModel[]> GetAllAsync(string provider)
+        private async Task<MovieView[]> GetAllAsync(string provider)
         {
             // Inject header token
             var uriBuilder = new UriBuilder($"{settings.BaseUrl}/{provider}/movies");
@@ -51,7 +51,7 @@ namespace StarWars.Api.Services
             var jObject = JObject.Parse(await response.Content.ReadAsStringAsync());
             var movies = ((JArray)jObject["Movies"]).Select(o => {
                 var movie = JsonConvert.DeserializeObject<Movie>(o.ToString());
-                return Mapper.Map<MovieViewModel>(movie);
+                return Mapper.Map<MovieView>(movie);
             });
 
             if (!response.IsSuccessStatusCode)
@@ -63,7 +63,7 @@ namespace StarWars.Api.Services
             return movies.ToArray();
         }
 
-        public async Task<MovieDetailsViewModel> Get(string provider, string id)
+        public async Task<MovieDetailsView> Get(string provider, string id)
         {
             var uriBuilder = new UriBuilder($"{settings.BaseUrl}/{provider}/movie/{id}");
             var response = await httpClient.GetAsync(uriBuilder.Uri);
@@ -76,7 +76,7 @@ namespace StarWars.Api.Services
                 throw new ServiceException(response.StatusCode, $"Get Movie failed for provider {provider} and id {id}");
             }
 
-            return Mapper.Map<MovieDetailsViewModel>(movie);
+            return Mapper.Map<MovieDetailsView>(movie);
         }
     }
 }

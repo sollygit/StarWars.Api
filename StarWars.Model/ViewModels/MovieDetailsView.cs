@@ -1,6 +1,6 @@
 ﻿namespace StarWars.Model.ViewModels
 {
-    public class MovieDetailsViewModel
+    public class MovieDetailsView
     {
         public string ID { get; set; }
         public string Title { get; set; }

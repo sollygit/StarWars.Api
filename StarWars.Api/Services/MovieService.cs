@@ -21,16 +21,16 @@ namespace StarWars.Api.Services
             this.repo = repo;
         }
 
-        public async Task<MovieViewModel[]> All()
+        public async Task<MovieView[]> All()
         {
             var items = await repo.All();
-            return Mapper.Map<MovieViewModel[]>(items);
+            return Mapper.Map<MovieView[]>(items);
         }
 
-        public async Task<MovieViewModel> Get(Guid movieID)
+        public async Task<MovieView> Get(Guid movieID)
         {
             var movie = await repo.Get(movieID);
-            return Mapper.Map<MovieViewModel>(movie);
+            return Mapper.Map<MovieView>(movie);
         }
     }
 }
