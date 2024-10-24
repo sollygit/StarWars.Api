@@ -7,7 +7,7 @@ namespace StarWars.Repository
     public interface IMoviesRepository : IRepository<Movie>
     {
         Task<IEnumerable<Movie>> All();
-        Task<Movie> Get(Guid movieID);
+        Task<Movie> GetByID(string id);
         Task<Movie> Create(Movie movie);
         Task<Movie> Update(string id, Movie movie);
         Task<Movie> Delete(string id);
@@ -30,11 +30,11 @@ namespace StarWars.Repository
                 .ToListAsync();
         }
 
-        public async Task<Movie> Get(Guid movieID)
+        public async Task<Movie> GetByID(string id)
         {
             return await _dbContext.Movies
-                .Include(p => p.MovieRatings)
-                .SingleOrDefaultAsync(p => p.MovieID == movieID);
+                .Include(m => m.MovieRatings)
+                .SingleOrDefaultAsync(m => m.ID == id);
         }
 
         public async Task<Movie> Create(Movie movie)
@@ -55,7 +55,7 @@ namespace StarWars.Repository
             // Remove or update child collection items
             foreach (var rating in movieRatings)
             {
-                var mvEntity = entity.MovieRatings.SingleOrDefault(o => o.ID == rating.ID);
+                var mvEntity = entity.MovieRatings.SingleOrDefault(o => o.MovieID == rating.MovieID);
                 if (mvEntity != null)
                 {
                     _dbContext.Entry(rating).CurrentValues.SetValues(mvEntity);
@@ -69,7 +69,7 @@ namespace StarWars.Repository
             // Add new child collection items
             foreach (var md in entity.MovieRatings)
             {
-                if (movieRatings.All(o => o.ID != md.ID))
+                if (movieRatings.All(o => o.MovieID != md.MovieID))
                 {
                     _dbContext.Add(md);
                 }

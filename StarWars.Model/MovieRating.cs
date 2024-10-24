@@ -1,14 +1,12 @@
 ﻿using FluentValidation;
+using System;
 
 namespace StarWars.Model
 {
     public class MovieRating : AuditableEntity
     {
-        public string ID { get; set; }
-        public string Title { get; set; }
-        public string Year { get; set; }
-        public string Type { get; set; }
-        public string Poster { get; set; }
+        public Guid ID { get; set; }
+        public string MovieID { get; set; }
         public decimal Price { get; set; }
         public string Rated { get; set; }
         public string Released { get; set; }
@@ -28,11 +26,8 @@ namespace StarWars.Model
     {
         public MovieRatingValidator()
         {
-            RuleFor(x => x.ID)
-                .NotEmpty().WithMessage("ID cannot be empty");
-            RuleFor(x => x.Title)
-                .NotEmpty().WithMessage("Title cannot be empty")
-                .MaximumLength(100).WithMessage("Title maximum length is 100");
+            RuleFor(x => x.ID).NotEmpty().WithMessage("ID cannot be empty");
+            RuleFor(x => x.MovieID).NotEmpty().WithMessage("MovieID cannot be empty");
         }
     }
 }

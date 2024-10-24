@@ -68,15 +68,15 @@ namespace StarWars.Api.Services
             var uriBuilder = new UriBuilder($"{settings.BaseUrl}/{provider}/movie/{id}");
             var response = await httpClient.GetAsync(uriBuilder.Uri);
             var result = response.Content.ReadAsStringAsync().Result;
-            var movie = JsonConvert.DeserializeObject<MovieRating>(result);
+            var movieRating = JsonConvert.DeserializeObject<MovieRatingView>(result);
 
             if (!response.IsSuccessStatusCode)
             {
                 logger.LogError($"Something went wrong: {response.StatusCode}");
-                throw new ServiceException(response.StatusCode, $"Get Movie failed for provider {provider} and id {id}");
+                throw new ServiceException(response.StatusCode, $"Get movie failed for provider {provider} and id {id}");
             }
 
-            return Mapper.Map<MovieRatingView>(movie);
+            return movieRating;
         }
     }
 }

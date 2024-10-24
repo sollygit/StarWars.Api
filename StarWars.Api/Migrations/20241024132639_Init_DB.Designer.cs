@@ -12,7 +12,7 @@ using StarWars.Repository;
 namespace StarWars.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241024103042_Init_DB")]
+    [Migration("20241024132639_Init_DB")]
     partial class Init_DB
     {
         /// <inheritdoc />
@@ -27,17 +27,11 @@ namespace StarWars.Api.Migrations
 
             modelBuilder.Entity("StarWars.Model.Movie", b =>
                 {
-                    b.Property<Guid>("MovieID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                    b.Property<string>("ID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTimeOffset?>("CreatedOn")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("ID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -63,7 +57,7 @@ namespace StarWars.Api.Migrations
                     b.Property<string>("Year")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("MovieID")
+                    b.HasKey("ID")
                         .HasName("PK_Movie");
 
                     b.ToTable("Movie", (string)null);
@@ -71,8 +65,10 @@ namespace StarWars.Api.Migrations
 
             modelBuilder.Entity("StarWars.Model.MovieRating", b =>
                 {
-                    b.Property<string>("ID")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Awards")
                         .HasColumnType("nvarchar(max)");
@@ -95,12 +91,9 @@ namespace StarWars.Api.Migrations
                     b.Property<int>("Metascore")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("MovieID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Poster")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                    b.Property<string>("MovieID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -117,27 +110,19 @@ namespace StarWars.Api.Migrations
                     b.Property<string>("Runtime")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTimeOffset?>("UpdatedOn")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Votes")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Writer")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Year")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
+                    b.HasKey("ID")
+                        .HasName("PK_MovieRating");
 
                     b.HasIndex("MovieID");
 
@@ -148,7 +133,9 @@ namespace StarWars.Api.Migrations
                 {
                     b.HasOne("StarWars.Model.Movie", null)
                         .WithMany("MovieRatings")
-                        .HasForeignKey("MovieID");
+                        .HasForeignKey("MovieID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("StarWars.Model.Movie", b =>

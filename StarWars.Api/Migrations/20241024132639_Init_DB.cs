@@ -15,8 +15,7 @@ namespace StarWars.Api.Migrations
                 name: "Movie",
                 columns: table => new
                 {
-                    MovieID = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
-                    ID = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Year = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -28,18 +27,15 @@ namespace StarWars.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Movie", x => x.MovieID);
+                    table.PrimaryKey("PK_Movie", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
                 name: "MovieRating",
                 columns: table => new
                 {
-                    ID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Year = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Poster = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
+                    MovieID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Rated = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Released = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -52,8 +48,7 @@ namespace StarWars.Api.Migrations
                     Awards = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Metascore = table.Column<int>(type: "int", nullable: false),
                     Rating = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Votes = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MovieID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Votes = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     UpdatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
@@ -64,7 +59,8 @@ namespace StarWars.Api.Migrations
                         name: "FK_MovieRating_Movie_MovieID",
                         column: x => x.MovieID,
                         principalTable: "Movie",
-                        principalColumn: "MovieID");
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

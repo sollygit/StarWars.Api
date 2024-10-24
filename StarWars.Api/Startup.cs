@@ -18,6 +18,7 @@ using StarWars.Model;
 using StarWars.Repository;
 using System;
 using System.Net.Http;
+using System.Text.Json.Serialization;
 
 namespace StarWars.Api
 {
@@ -67,8 +68,9 @@ namespace StarWars.Api
             .AddPolicyHandler(GetRetryPolicy()); // Set retry policy
 
             services
-                .AddRouting(options => options.LowercaseUrls = true)
-                .AddControllers();
+                .AddRouting(o => o.LowercaseUrls = true)
+                .AddControllers()
+                .AddJsonOptions(o => o.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull);
 
             services.AddFluentValidationAutoValidation();
             services.AddFluentValidationClientsideAdapters();

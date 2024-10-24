@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using StarWars.Interface;
 using StarWars.Model.ViewModels;
 using StarWars.Repository;
-using System;
 using System.Threading.Tasks;
 
 namespace StarWars.Api.Services
@@ -27,10 +26,10 @@ namespace StarWars.Api.Services
             return Mapper.Map<MovieView[]>(items);
         }
 
-        public async Task<MovieView> Get(Guid movieID)
+        public async Task<MovieView> Get(string id)
         {
-            var movie = await repo.Get(movieID);
-            return Mapper.Map<MovieView>(movie);
+            var item = await repo.GetByID(id);
+            return Mapper.Map<MovieView>(item);
         }
     }
 }

@@ -1,12 +1,10 @@
 ﻿using FluentValidation;
-using System;
 using System.Collections.Generic;
 
 namespace StarWars.Model
 {
     public class Movie : AuditableEntity
     {
-        public Guid MovieID { get; set; }
         public string ID { get; set; }
         public string Title { get; set; }
         public string Year { get; set; }
@@ -21,15 +19,11 @@ namespace StarWars.Model
     {
         public MovieValidator()
         {
-            RuleFor(x => x.MovieID)
-                .NotEmpty().WithMessage("MovieID cannot be empty");
-            RuleFor(x => x.ID)
-                .NotEmpty().WithMessage("ID cannot be empty");
+            RuleFor(x => x.ID).NotEmpty().WithMessage("ID cannot be empty");
             RuleFor(x => x.Title)
                 .NotEmpty().WithMessage("Title cannot be empty")
                 .MaximumLength(100).WithMessage("Title maximum length is 100");
-            RuleForEach(x => x.MovieRatings)
-                .SetValidator(new MovieRatingValidator());
+            RuleForEach(x => x.MovieRatings).SetValidator(new MovieRatingValidator());
         }
     }
 }
