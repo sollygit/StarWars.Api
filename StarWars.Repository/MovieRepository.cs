@@ -25,7 +25,7 @@ namespace StarWars.Repository
         public async Task<IEnumerable<Movie>> All()
         {
             return await _dbContext.Movies
-                .Include(p => p.MovieDetails)
+                .Include(p => p.MovieRatings)
                 .OrderBy(p => p.Title)
                 .ToListAsync();
         }
@@ -33,7 +33,7 @@ namespace StarWars.Repository
         public async Task<Movie> Get(Guid movieID)
         {
             return await _dbContext.Movies
-                .Include(p => p.MovieDetails)
+                .Include(p => p.MovieRatings)
                 .SingleOrDefaultAsync(p => p.MovieID == movieID);
         }
 
@@ -46,30 +46,30 @@ namespace StarWars.Repository
 
         public async Task<Movie> Update(string id, Movie entity)
         {
-            var movie = _dbContext.Movies.Include(p => p.MovieDetails).Single(p => p.ID == id);
-            var movieDetails = movie.MovieDetails;
+            var movie = _dbContext.Movies.Include(p => p.MovieRatings).Single(p => p.ID == id);
+            var movieRatings = movie.MovieRatings;
 
             // Update the parent movie
             _dbContext.Entry(movie).CurrentValues.SetValues(entity);
 
             // Remove or update child collection items
-            foreach (var md in movieDetails)
+            foreach (var rating in movieRatings)
             {
-                var mvEntity = entity.MovieDetails.SingleOrDefault(o => o.ID == md.ID);
+                var mvEntity = entity.MovieRatings.SingleOrDefault(o => o.ID == rating.ID);
                 if (mvEntity != null)
                 {
-                    _dbContext.Entry(md).CurrentValues.SetValues(mvEntity);
+                    _dbContext.Entry(rating).CurrentValues.SetValues(mvEntity);
                 }
                 else
                 {
-                    _dbContext.Remove(md);
+                    _dbContext.Remove(rating);
                 }
             }
 
             // Add new child collection items
-            foreach (var md in entity.MovieDetails)
+            foreach (var md in entity.MovieRatings)
             {
-                if (movieDetails.All(o => o.ID != md.ID))
+                if (movieRatings.All(o => o.ID != md.ID))
                 {
                     _dbContext.Add(md);
                 }

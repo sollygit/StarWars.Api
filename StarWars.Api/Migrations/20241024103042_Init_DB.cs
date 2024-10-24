@@ -32,7 +32,7 @@ namespace StarWars.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MovieDetails",
+                name: "MovieRating",
                 columns: table => new
                 {
                     ID = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -59,17 +59,17 @@ namespace StarWars.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MovieDetails", x => x.ID);
+                    table.PrimaryKey("PK_MovieRating", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_MovieDetails_Movie_MovieID",
+                        name: "FK_MovieRating_Movie_MovieID",
                         column: x => x.MovieID,
                         principalTable: "Movie",
                         principalColumn: "MovieID");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_MovieDetails_MovieID",
-                table: "MovieDetails",
+                name: "IX_MovieRating_MovieID",
+                table: "MovieRating",
                 column: "MovieID");
         }
 
@@ -77,7 +77,7 @@ namespace StarWars.Api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "MovieDetails");
+                name: "MovieRating");
 
             migrationBuilder.DropTable(
                 name: "Movie");

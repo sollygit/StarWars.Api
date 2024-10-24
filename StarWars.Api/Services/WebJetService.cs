@@ -63,12 +63,12 @@ namespace StarWars.Api.Services
             return movies.ToArray();
         }
 
-        public async Task<MovieDetailsView> Get(string provider, string id)
+        public async Task<MovieRatingView> Get(string provider, string id)
         {
             var uriBuilder = new UriBuilder($"{settings.BaseUrl}/{provider}/movie/{id}");
             var response = await httpClient.GetAsync(uriBuilder.Uri);
             var result = response.Content.ReadAsStringAsync().Result;
-            var movie = JsonConvert.DeserializeObject<MovieDetails>(result);
+            var movie = JsonConvert.DeserializeObject<MovieRating>(result);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -76,7 +76,7 @@ namespace StarWars.Api.Services
                 throw new ServiceException(response.StatusCode, $"Get Movie failed for provider {provider} and id {id}");
             }
 
-            return Mapper.Map<MovieDetailsView>(movie);
+            return Mapper.Map<MovieRatingView>(movie);
         }
     }
 }

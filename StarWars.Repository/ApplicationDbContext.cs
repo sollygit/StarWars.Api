@@ -7,7 +7,7 @@ namespace StarWars.Repository
     public class ApplicationDbContext : DbContext
     {
         public DbSet<Movie> Movies { get; set; }
-        public DbSet<MovieDetails> MovieDetails { get; set; }
+        public DbSet<MovieRating> MovieRating { get; set; }
 
         public ApplicationDbContext(DbContextOptions options) : base(options)
         { 
@@ -17,7 +17,7 @@ namespace StarWars.Repository
         {
             base.OnModelCreating(builder);
             builder.ApplyConfiguration(new MovieConfiguration());
-            builder.ApplyConfiguration(new MovieDetailsConfiguration());
+            builder.ApplyConfiguration(new MovieRatingConfiguration());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

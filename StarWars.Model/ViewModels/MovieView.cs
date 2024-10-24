@@ -10,6 +10,6 @@ namespace StarWars.Model.ViewModels
         public string Type { get; set; }
         public string Poster { get; set; }
         public decimal Price { get; set; }
-        public ICollection<MovieDetailsView> MovieDetails { get; set; } = new List<MovieDetailsView>();
+        public ICollection<MovieRatingView> MovieRatings { get; set; } = new List<MovieRatingView>();
     }
 }

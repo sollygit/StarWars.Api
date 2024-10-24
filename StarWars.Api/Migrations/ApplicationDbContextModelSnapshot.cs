@@ -66,7 +66,7 @@ namespace StarWars.Api.Migrations
                     b.ToTable("Movie", (string)null);
                 });
 
-            modelBuilder.Entity("StarWars.Model.MovieDetails", b =>
+            modelBuilder.Entity("StarWars.Model.MovieRating", b =>
                 {
                     b.Property<string>("ID")
                         .HasColumnType("nvarchar(450)");
@@ -138,19 +138,19 @@ namespace StarWars.Api.Migrations
 
                     b.HasIndex("MovieID");
 
-                    b.ToTable("MovieDetails", (string)null);
+                    b.ToTable("MovieRating", (string)null);
                 });
 
-            modelBuilder.Entity("StarWars.Model.MovieDetails", b =>
+            modelBuilder.Entity("StarWars.Model.MovieRating", b =>
                 {
                     b.HasOne("StarWars.Model.Movie", null)
-                        .WithMany("MovieDetails")
+                        .WithMany("MovieRatings")
                         .HasForeignKey("MovieID");
                 });
 
             modelBuilder.Entity("StarWars.Model.Movie", b =>
                 {
-                    b.Navigation("MovieDetails");
+                    b.Navigation("MovieRatings");
                 });
 #pragma warning restore 612, 618
         }

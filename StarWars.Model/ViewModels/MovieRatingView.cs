@@ -1,8 +1,6 @@
-﻿using FluentValidation;
-
-namespace StarWars.Model
+﻿namespace StarWars.Model.ViewModels
 {
-    public class MovieDetails : AuditableEntity
+    public class MovieRatingView
     {
         public string ID { get; set; }
         public string Title { get; set; }
@@ -22,17 +20,5 @@ namespace StarWars.Model
         public int Metascore { get; set; }
         public decimal Rating { get; set; }
         public string Votes { get; set; }
-    }
-
-    public class MovieDetailsValidator : AbstractValidator<MovieDetails>
-    {
-        public MovieDetailsValidator()
-        {
-            RuleFor(x => x.ID)
-                .NotEmpty().WithMessage("ID cannot be empty");
-            RuleFor(x => x.Title)
-                .NotEmpty().WithMessage("Title cannot be empty")
-                .MaximumLength(100).WithMessage("Title maximum length is 100");
-        }
     }
 }
