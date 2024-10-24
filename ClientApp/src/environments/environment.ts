@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   baseUrl: "https://localhost:44393",
-  cinemaWorld: "CinemaWorld",
-  filmWorld: "FilmWorld"
+  cinemaWorld: "cinemaWorld",
+  filmWorld: "filmWorld"
 };
 
 /*

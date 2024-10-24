@@ -13,11 +13,11 @@ namespace StarWars.Repository
         Task<Movie> Delete(string id);
     }
 
-    public class MoviesRepository : BaseRepository<Movie>, IMoviesRepository
+    public class MovieRepository : BaseRepository<Movie>, IMoviesRepository
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public MoviesRepository(ApplicationDbContext context) : base(context)
+        public MovieRepository(ApplicationDbContext context) : base(context)
         {
             _dbContext = context;
         }

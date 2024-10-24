@@ -7,7 +7,7 @@ import { ConfigurationService } from './configuration.service';
 
 @Injectable()
 export class MovieService {
-  private readonly _getAll: string = "/api/Movie";
+  private readonly _getAll: string = "/api/webjet";
 
   public providers: Provider[] = [];
   public get moviesUrl() { return this.configurations.baseUrl + this._getAll; }

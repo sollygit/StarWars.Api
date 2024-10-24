@@ -45,10 +45,10 @@ namespace StarWars.Api
                 cfg.AddProfile<AutoMapperProfile>();
             });
 
-            var settings = Configuration.GetSection("MovieSettings");
+            var settings = Configuration.GetSection("WebJetSettings");
 
             // Configurations
-            services.Configure<MovieSettings>(settings);
+            services.Configure<WebJetSettings>(settings);
 
             services.AddMemoryCache();
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -56,9 +56,11 @@ namespace StarWars.Api
                     Configuration["ConnectionStrings:DefaultConnection"],
                     b => b.MigrationsAssembly("StarWars.Api")));
 
-            services.AddSingleton(provider => settings.Get<MovieSettings>());
-            services.AddTransient<IMoviesRepository, MoviesRepository>();
-            services.AddHttpClient<IMovieService, MovieService>(client => {
+            services.AddSingleton(provider => settings.Get<WebJetSettings>());
+            services.AddTransient<IMoviesRepository, MovieRepository>();
+            services.AddScoped<IMovieService, MovieService>();
+            services.AddScoped<IWebJetService, WebJetService>();
+            services.AddHttpClient<IWebJetService, WebJetService>(client => {
                 client.DefaultRequestHeaders.Add("x-access-token", settings["AccessToken"]);
             })
             .SetHandlerLifetime(TimeSpan.FromMinutes(5)) // Set lifetime to five minutes

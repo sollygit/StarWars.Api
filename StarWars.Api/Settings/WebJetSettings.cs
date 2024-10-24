@@ -1,6 +1,6 @@
 ﻿namespace StarWars.Api.Settings
 {
-    public class MovieSettings
+    public class WebJetSettings
     {
         public string BaseUrl { get; set; }
         public int Cache { get; set; }

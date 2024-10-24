@@ -16,32 +16,14 @@ namespace StarWars.Api.Controllers
             this.service = service;
         }
 
-        [HttpGet("{provider}")]
-        public async Task<IActionResult> GetAll([FromRoute] string provider)
+        [HttpGet()]
+        public async Task<IActionResult> All()
         {
-            if (string.IsNullOrEmpty(provider))
-                return BadRequest("Provider is required");
-
-            var items = await service.GetAll(provider);
-
+            var items = await service.All();
             return new OkObjectResult(items);
         }
 
-        [HttpGet("{provider}/{id}")]
-        public async Task<IActionResult> Get([FromRoute] string provider, [FromRoute] string id)
-        {
-            if (string.IsNullOrEmpty(provider))
-                return BadRequest("Provider is required");
-
-            if (string.IsNullOrEmpty(id))
-                return BadRequest("Movie ID is required");
-
-            var item = await service.Get(provider, id);
-
-            return new OkObjectResult(item);
-        }
-
-        [HttpGet("starwars/{movieID}")]
+        [HttpGet("{movieID}")]
         public async Task<IActionResult> Get([FromRoute] Guid movieID)
         {
             var item = await service.Get(movieID);
