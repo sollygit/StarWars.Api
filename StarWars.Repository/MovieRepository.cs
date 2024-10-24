@@ -39,6 +39,8 @@ namespace StarWars.Repository
 
         public async Task<Movie> Create(Movie movie)
         {
+            if (_dbContext.Movies.Any(m => m.ID == movie.ID)) return null;
+
             var entry = _dbContext.Add(movie);
             await _dbContext.SaveChangesAsync();
             return entry.Entity;

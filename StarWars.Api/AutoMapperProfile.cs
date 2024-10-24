@@ -15,14 +15,16 @@ namespace StarWars.Api
                 .ForMember(o => o.Year, map => map.MapFrom(o => o.Year))
                 .ForMember(o => o.Type, map => map.MapFrom(o => o.Type))
                 .ForMember(o => o.Poster, map => map.MapFrom(o => o.Poster))
-                .ForMember(o => o.Price, map => map.MapFrom(o => GetRandomPrice()))
+                .ForMember(o => o.Price, map => map.MapFrom(o => GetRandomPrice(o.Price)))
                 .ReverseMap();
 
             CreateMap<MovieRating, MovieRatingView>()
                 .ReverseMap();
         }
 
-        static decimal GetRandomPrice() => 
+        static decimal GetRandomPrice(decimal price) =>
+            price != 0 ? 
+            price : 
             decimal.Parse(string.Format("{0:0.##}", new Random().NextDouble() * 1000));
     }
 }

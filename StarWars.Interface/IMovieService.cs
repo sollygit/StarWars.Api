@@ -1,4 +1,5 @@
-﻿using StarWars.Model.ViewModels;
+﻿using StarWars.Model;
+using StarWars.Model.ViewModels;
 using System.Threading.Tasks;
 
 namespace StarWars.Interface
@@ -7,5 +8,6 @@ namespace StarWars.Interface
     {
         Task<MovieView[]> All();
         Task<MovieView> Get(string id);
+        Task<MovieView> Create(Movie movie);
     }
 }

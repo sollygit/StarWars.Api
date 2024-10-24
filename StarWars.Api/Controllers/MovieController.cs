@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using StarWars.Interface;
+using StarWars.Model;
+using StarWars.Model.ViewModels;
 using System.Threading.Tasks;
 
 namespace StarWars.Api.Controllers
@@ -27,6 +30,16 @@ namespace StarWars.Api.Controllers
         {
             var item = await service.Get(id);
             if (item == null) return new NotFoundObjectResult(id);
+            
+            return new OkObjectResult(item);
+        }
+
+        [HttpPost()]
+        public async Task<IActionResult> Create([FromBody] MovieView movieView)
+        {
+            var movie = Mapper.Map<Movie>(movieView);
+            var item = await service.Create(movie);
+            if (item == null) return new BadRequestObjectResult($"ID '{movieView.ID}' already exists in DB");
             
             return new OkObjectResult(item);
         }
