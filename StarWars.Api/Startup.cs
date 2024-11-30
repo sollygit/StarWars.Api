@@ -56,7 +56,7 @@ namespace StarWars.Api
             //services.AddDbContext<ApplicationDbContext>(options =>
             //    options.UseSqlServer(
             //        Configuration["ConnectionStrings:DefaultConnection"],
-            //        b => b.MigrationsAssembly("StarWars.Api")));
+            //        b => b.MigrationsAssembly("StarWars.API")));
 
             // Use InMemoryDatabase
             services.AddDbContext<ApplicationDbContext>(o => {
